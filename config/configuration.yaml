@@ -28,7 +28,7 @@ shell_command:
 python_script:
 
 lovelace:
-  resource_mode: yaml
+  mode: yaml
   dashboards:
     lovelace:
       mode: yaml
