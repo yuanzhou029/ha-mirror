@@ -27,6 +27,9 @@ shell_command:
   
 python_script:
 
+lovelace:
+  mode: yaml
+  
 http:
   server_port: 1404
   use_x_forwarded_for: true
