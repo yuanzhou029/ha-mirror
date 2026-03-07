@@ -28,7 +28,15 @@ shell_command:
 python_script:
 
 lovelace:
-  mode: yaml
+  resource_mode: yaml
+  dashboards:
+    lovelace:
+      mode: yaml
+      filename: ui-lovelace.yaml
+      title: Overview
+      icon: mdi:view-dashboard
+      show_in_sidebar: true
+      
   
 http:
   server_port: 1404
