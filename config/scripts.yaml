@@ -1,7 +1,8 @@
 # scripts.yaml
+
 send_tcp_command_script:
   alias: "发送 TCP 命令通用脚本"
-  description: "一个用于调用 shell_command.send_cmd 的通用脚本，接受 IP、端口和命令作为参数。"
+  description: "一个用于调用 shell_command.send_cmd 的通用脚本，接受 IP、端口、命令、回车符开关、十六进制开关和编码方式作为参数。"
   fields:
     ip_address:
       name: "IP 地址"
@@ -20,17 +21,52 @@ send_tcp_command_script:
           max: 65535
     command_string:
       name: "命令字符串"
-      description: "要发送给设备的命令"
+      description: "要发送的 TCP 命令。如果是十六进制，请以空格分隔字节（例如：'01 0A FF'）。"
       required: true
       selector:
         text:
           type: text
+    append_carriage_return:
+      name: "添加回车符 (\r)"
+      description: "如果勾选，将在命令末尾自动添加一个回车符 (ASCII \r 或 HEX 0D)。"
+      required: false
+      default: false
+      selector:
+        boolean: {}
+    send_as_hex:
+      name: "发送十六进制 (HEX) 数据"
+      description: "如果勾选，命令字符串将被解释为十六进制字节序列（例如：'01 0A FF'）。否则，将作为普通文本发送。"
+      required: false
+      default: false
+      selector:
+        boolean: {}
+    encoding:
+      name: "编码方式"
+      description: "当发送文本数据时，用于编码命令字符串的字符集（例如：UTF-8, GBK）。"
+      required: false
+      default: "utf-8"
+      selector:
+        select:
+          options:
+            - "utf-8"
+            - "ascii"
+            - "gbk"
+            - "gb2312"
+            - "latin-1"
+            - "iso-8859-1"
+          mode: dropdown
+
   sequence:
     - service: shell_command.send_cmd
       data:
         ip: "{{ ip_address }}"
         port: "{{ port_number }}"
         command: "{{ command_string }}"
+        # --- 重点修改这两行 ---
+        append_cr: "{{ append_carriage_return }}" # 直接传递布尔值，Home Assistant会将其转为"true"或"false"字符串
+        send_hex: "{{ send_as_hex }}"            # 同上
+        # ----------------------
+        encoding: "{{ encoding }}"
 #########################################################################
 # 串口通信
 send_rs232_data_script:
