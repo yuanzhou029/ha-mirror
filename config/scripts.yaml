@@ -1,0 +1,180 @@
+# scripts.yaml
+send_tcp_command_script:
+  alias: "发送 TCP 命令通用脚本"
+  description: "一个用于调用 shell_command.send_cmd 的通用脚本，接受 IP、端口和命令作为参数。"
+  fields:
+    ip_address:
+      name: "IP 地址"
+      description: "目标设备的 IP 地址"
+      required: true
+      selector:
+        text:
+          type: text
+    port_number:
+      name: "端口号"
+      description: "目标设备的端口号"
+      required: true
+      selector:
+        number:
+          min: 1
+          max: 65535
+    command_string:
+      name: "命令字符串"
+      description: "要发送给设备的命令"
+      required: true
+      selector:
+        text:
+          type: text
+  sequence:
+    - service: shell_command.send_cmd
+      data:
+        ip: "{{ ip_address }}"
+        port: "{{ port_number }}"
+        command: "{{ command_string }}"
+#########################################################################
+# 串口通信
+send_rs232_data_script:
+  alias: "发送 RS232 数据" # 使用 alias 替代 name
+  description: "一个用于通过串口发送数据并可选读取响应的通用脚本。"
+  fields:
+    data:
+      name: "要发送的数据"
+      description: "要通过串口发送的字符串或十六进制数据。"
+      required: true
+      example: "PowerOn"
+      selector:
+        text:
+          type: text # 文本输入框
+          multiline: false # 单行文本
+    port:
+      name: "串口路径"
+      description: "串口设备的路径 (例如 /dev/ttyS1 或 /dev/ttyUSB0)。"
+      required: true
+      example: "/dev/ttyS1"
+      default: "/dev/ttyS1"
+      selector:
+        text:
+          type: text # 文本输入框
+    baudrate:
+      name: "波特率"
+      description: "串口连接的波特率。"
+      required: true
+      example: 9600
+      default: 9600
+      selector:
+        number:
+          min: 300 # 常见的最小波特率
+          max: 115200 # 常见的最大波特率，根据实际设备可调整
+          step: 1
+          mode: box # 以文本框形式显示数字
+          unit_of_measurement: "bps" # 单位
+    bytesize:
+      name: "数据位"
+      description: "每个字符的数据位数 (5, 6, 7 或 8)。"
+      required: true
+      default: 8
+      selector:
+        select:
+          options: # 固定选项列表
+            - "5"
+            - "6"
+            - "7"
+            - "8"
+          mode: dropdown # 下拉选择框
+    parity:
+      name: "校验位"
+      description: "奇偶校验设置 ('N' 为无, 'E' 为偶, 'O' 为奇)。"
+      required: true
+      default: "N"
+      selector:
+        select:
+          options: # 固定选项列表
+            - label: "无 (None)"
+              value: "N"
+            - label: "偶 (Even)"
+              value: "E"
+            - label: "奇 (Odd)"
+              value: "O"
+            - label: "标记 (Mark)" # pyserial 支持 Mark/Space
+              value: "M"
+            - label: "空格 (Space)"
+              value: "S"
+          mode: dropdown
+    stopbits:
+      name: "停止位"
+      description: "停止位数 (1.0, 1.5 或 2.0)。"
+      required: true
+      default: 1.0
+      selector:
+        select:
+          options: # 固定选项列表
+            - "1.0"
+            - "1.5"
+            - "2.0"
+          mode: dropdown
+    timeout:
+      name: "读取超时 (秒)"
+      description: "读取响应时的超时时间（秒）。"
+      required: true
+      default: 1.0
+      selector:
+        number:
+          min: 0.0
+          max: 60.0 # 最大超时时间可根据需要调整
+          step: 0.1
+          mode: slider # 滑块或文本框都可以，这里用滑块示例
+          unit_of_measurement: "s"
+    is_hex:
+      name: "HEX十六进制HEX"
+      description: "勾选此项表示要发送的数据应被解释为十六进制字符串。"
+      required: true
+      default: false
+      selector:
+        boolean: {} # 布尔开关
+    read_response:
+      name: "读取响应"
+      description: "勾选此项表示脚本应尝试读取串口的响应数据。"
+      required: true
+      default: false
+      selector:
+        boolean: {} # 布尔开关
+    encoding:
+      name: "编码方式"
+      description: "当发送数据为字符串时使用的字符编码。"
+      required: true
+      example: "ascii"
+      default: "ascii"
+      selector:
+        select:
+          options: # 常用编码方式
+            - "ascii"
+            - "utf-8"
+            - "latin-1"
+            - "gbk"
+            - "gb2312"
+          mode: dropdown
+  sequence:
+    - service: shell_command.send_rs232_command
+      data:
+        # 将脚本接收到的参数传递给 shell_command
+        data: "{{ data }}"
+        port: "{{ port }}"
+        baudrate: "{{ baudrate }}"
+        bytesize: "{{ bytesize }}" # 添加 bytesize 参数
+        parity: "{{ parity }}"     # 添加 parity 参数
+        stopbits: "{{ stopbits }}" # 添加 stopbits 参数
+        timeout: "{{ timeout }}"   # 添加 timeout 参数
+        is_hex: "{{ is_hex | default(false) }}"
+        read_response: "{{ read_response | default(false) }}"
+        encoding: "{{ encoding }}"
+
+#########################################################################      
+execute_matrix_switch:
+  alias: "执行矩阵切换"
+  sequence:
+    - service: python_script.matrix_switcher
+    
+audio_matrix_switch:
+  alias: "音频矩阵开关"
+  sequence:
+    - service: python_script.audio_matrix
