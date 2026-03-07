@@ -29,7 +29,7 @@ python_script:
 
 lovelace:
   resource_mode: yaml
-  dashboards:
+  dashboards: lovelace
     lovelace:
       mode: yaml
       filename: ui-lovelace.yaml
