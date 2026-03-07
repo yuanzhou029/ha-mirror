@@ -29,7 +29,6 @@ python_script:
 
 lovelace:
   resource_mode: yaml
-  default_dashboard: lovelace
   dashboards:
     lovelace:
       mode: yaml
