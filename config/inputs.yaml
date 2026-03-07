@@ -1,0 +1,43 @@
+# inputs.yaml
+matrix_source_selector:
+  name: "视频源选择"
+  options:
+    - "PS5"
+    - "PC"
+    - "Switch"
+    - "机顶盒"
+    - "HDMI1"
+    - "HDMI2"
+  initial: "PS5"
+  icon: mdi:video-input-hdmi
+
+matrix_destination_selector:
+  name: "输出设备选择"
+  options:
+    - "TV"
+    - "Monitor"
+    - "Projector"
+  initial: "TV"
+  icon: mdi:monitor
+  
+############################################
+audio_source_selector:
+  name: "音频源选择"
+  options:
+    - "AOT1"
+    - "AOT2"
+    - "AOT3"
+    - "机顶盒"
+    - "HDMI1"
+    - "HDMI2"
+  initial: "AOT1"
+  icon: mdi:video-input-hdmi
+
+audio_destination_selector:
+  name: "音频输出设备"
+  options:
+    - "OUT1"
+    - "OUT2"
+    - "OUT3"
+  initial: "OUT1"
+  icon: mdi:monitor
