@@ -1,0 +1,29 @@
+# 仪表盘的标题
+    title: 我的控制中心仪表盘
+    # 默认视图（可以有多个视图，每个视图是一个 tab）
+    views:
+      - title: 概览
+        icon: mdi:home
+        cards:
+          - type: markdown
+            content: |
+              # 欢迎来到我的智能家居控制系统！
+              这是您的个性化控制中心。
+          - type: entities
+            title: 灯光控制
+            entities:
+              - light.客厅灯
+              - light.卧室灯
+          - type: weather-forecast
+            entity: weather.home # 替换为您的天气实体ID
+      - title: 设备
+        icon: mdi:devices
+        cards:
+          - type: vertical-stack
+            cards:
+              - type: glance
+                entities:
+                  - binary_sensor.前门传感器
+                  - sensor.室外温度
+              - type: media-control
+                entity: media_player.客厅音响 # 替换为您的媒体播放器实体ID
