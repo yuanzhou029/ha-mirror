@@ -1,0 +1,53 @@
+
+# 加载默认集成集。请勿移除.
+default_config:
+homeassistant: # <-- 请确保这一行从文件的最左边开始，前面没有任何空格
+  name: 智能会议室
+  latitude: 31.230416 # 请替换为你的实际纬度
+  longitude: 121.473701 # 请替换为你的实际经度
+  elevation: 50 # 请替换为你的海拔高度 (单位：米)
+  unit_system: metric
+  time_zone: Asia/Shanghai # 请替换为你的实际时区
+
+
+shell_command:
+  send_cmd: "/srv/homeassistant/bin/python3.13 /home/homeassistant/.homeassistant/scripts/send_tcp_command.py \"{{ ip }}\" \"{{ port }}\" \"{{ command }}\" \"{{ append_cr }}\" \"{{ send_hex }}\" \"{{ encoding }}\""
+  send_rs232_command: >
+    /srv/homeassistant/bin/python3.13 /home/homeassistant/.homeassistant/scripts/send_serial_data.py
+    "{{ data }}" {# 必须传入的基础数据参数 #}
+    {% if port is defined %} --port "{{ port }}" {% endif %}
+    {% if baudrate is defined %} --baudrate {{ baudrate }} {% endif %}
+    {% if read_response is defined and read_response %} --read-response {% endif %}
+    {% if is_hex is defined and is_hex %} --hex {% endif %}
+    {% if encoding is defined %} --encoding "{{ encoding }}" {% endif %}
+    {% if bytesize is defined %} --bytesize {{ bytesize }} {% endif %}
+    {% if parity is defined %} --parity "{{ parity }}" {% endif %}
+    {% if stopbits is defined %} --stopbits {{ stopbits }} {% endif %}
+    {% if timeout is defined %} --timeout {{ timeout }} {% endif %}
+  
+python_script:
+
+http:
+  server_port: 1404
+  use_x_forwarded_for: true
+  trusted_proxies:
+    - 127.0.0.1       # Nginx 和 HA 在同一台机器上时
+    - 192.168.2.2   # 假设 Nginx 服务器的 IP 是这个（如果是另一台机器）
+
+
+
+# 从主题文件夹加载前端主题
+frontend:
+  themes: !include_dir_merge_named themes
+input_select: !include inputs.yaml
+automation: !include automations.yaml   # 'automations.yaml' 文件中的所有自动化规则加载到此处。
+script: !include scripts.yaml           # 'scripts.yaml' 文件中的所有脚本加载到此处。
+scene: !include scenes.yaml             # 'scenes.yaml' 文件中的所有场景加载到此处。
+
+# 您可以根据需要添加更多集成或自定义配置，例如：
+# recorder: # 历史数据记录器配置
+#   db_url: sqlite:////config/home-assistant_v2.db # 数据库路径
+# sensor: !include sensors.yaml # 传感器配置
+# light: !include lights.yaml   # 灯光配置
+# switch: !include switches.yaml # 开关配置
+
