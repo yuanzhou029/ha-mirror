@@ -1,3 +1,0 @@
----
-title: HS Color Picker
----
