@@ -121,16 +121,6 @@ views:
             hold_action:
               action: more-info
           - show_name: true
-            show_icon: true
-            type: button
-            entity: input_boolean.test_toggle
-            name: 开关
-            icon: mdi:air-filter
-            show_state: true
-          - type: entities
-            entities:
-              - input_number.media_volume_slider
-          - show_name: true
             show_icon: false
             type: button
             icon: ''
