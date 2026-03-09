@@ -1,4 +1,12 @@
 background: center / cover no-repeat url('/local/img/blue.jpg') fixed
+kiosk_mode:
+  hide_header: true
+  hide_sidebar: true
+resources:
+  - url: /local/file-loader.js
+    type: file
+  - url: /local/kiosk-mode.js?v=1.0.0
+    type: kiosk
 views:
   - title: Home
     header:
@@ -20,7 +28,7 @@ views:
         name: 主机
         color: green
         show_entity_picture: true
-        icon: mdi:nas
+        icon: file:jz
     sections:
       - type: grid
         cards:
