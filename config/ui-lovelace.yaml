@@ -4,9 +4,9 @@ kiosk_mode:
   hide_sidebar: true
 resources:
   - url: /local/file-loader.js
-    type: file
+    type: module
   - url: /local/kiosk-mode.js?v=1.0.0
-    type: kiosk
+    type: module
 views:
   - title: Home
     header:
