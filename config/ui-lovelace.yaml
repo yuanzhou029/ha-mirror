@@ -67,10 +67,10 @@ views:
                   cards:
                     - type: entities # 包含用户名和密码输入框
                       entities:
-                        - entity: input_text.admin
+                        - entity: input_text.yong_hu_ming
                           name: 用户名
                           icon: mdi:account
-                        - entity: input_text.pawll # 密码输入框 (默认不遮蔽字符)
+                        - entity: input_text.mi_ma # 密码输入框 (默认不遮蔽字符)
                           name: 密码
                           icon: mdi:key
                           # 如果需要密码遮蔽，你可能需要安装 HACS 的 custom:hui-text-box-card 或类似插件，并配置其 type: password
@@ -82,8 +82,8 @@ views:
                         action: call-service
                         service: script.authenticate_and_navigate # 调用我们上面定义的认证脚本
                         data: # 将输入框的值作为参数传递给脚本
-                          username: "{{ states('input_text.admin') }}"
-                          password: "{{ states('input_text.pawll') }}"
+                          username: "{{ states('input_text.yong_hu_ming') }}"
+                          password: "{{ states('input_text.mi_ma') }}"
                 timeout: 0 # 弹出窗口不自动关闭
                 dismiss_action:
                   action: call-service
