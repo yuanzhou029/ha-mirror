@@ -11,12 +11,12 @@ views:
           * 请大家注意了，这只是一个测试功能
     badges:
       - type: entity
-        entity: weather.forecast_wo_de_jia
+        entity: weather.tian_qi_home
       - type: entity
         show_name: true
         show_state: false
         show_icon: true
-        entity: sensor.nas_drive_1_status
+        entity: sensor.backup_backup_manager_state
         name: 主机
         color: green
         show_entity_picture: true
