@@ -81,8 +81,8 @@ views:
                         action: call-service
                         service: script.authenticate_and_navigate # 调用我们上面定义的认证脚本
                         data: # 将输入框的值作为参数传递给脚本
-                          username: "{{ states('input_text.main_page_username') }}"
-                          password: "{{ states('input_text.main_page_password') }}"
+                          username: "{{ states('input_text.admin') }}"
+                          password: "{{ states('input_text.pawll') }}"
                 timeout: 0 # 弹出窗口不自动关闭
                 dismiss_action:
                   action: call-service
