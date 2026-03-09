@@ -8,13 +8,6 @@ kiosk_mode:
   hide_sidebar: true
 
 # 资源加载 (确保 kiosk-mode.js 类型正确)
-resources:
-  - url: /local/file-loader.js
-    type: module
-  - url: /local/kiosk-mode.js?v=9.0.2
-    type: module
-  - url: /local/browser_mod/browser_mod.js
-    type: module
 # --- 仪表盘视图定义 ---
 views:
   # --- 1. 主页视图 (Home Page) ---

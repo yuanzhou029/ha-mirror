@@ -38,6 +38,13 @@ lovelace:
       title: Overview
       icon: mdi:view-dashboard
       show_in_sidebar: true
+  resources: 
+    - url: /local/file-loader.js
+      type: module
+    - url: /local/kiosk-mode.js?v=9.0.2
+      type: module
+    - url: /local/browser_mod/browser_mod.js
+      type: module
       
   
 http:
