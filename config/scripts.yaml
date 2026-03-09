@@ -1,5 +1,41 @@
 # scripts.yaml
 
+authenticate_and_navigate:
+  alias: 主页导航到分类页
+  sequence:
+    - variables:
+        # 从服务调用中获取用户名和密码
+        provided_username: "{{ username | default('') }}"
+        provided_password: "{{ password | default('') }}"
+
+        # !!! 在这里设置你希望的正确用户名和密码 !!!
+        # 强烈建议使用 !secret 引用 secrets.yaml 中的值，例如：
+        # correct_username: !secret main_page_login_username
+        # correct_password: !secret main_page_login_password
+        # 但为演示方便，这里先直接写死。
+        correct_username: "admin" # 请替换为你的用户名
+        correct_password: "admin"   # 请替换为你的密码
+
+    - if:
+        condition:
+          - condition: template
+            value_template: "{{ provided_username == correct_username }}"
+          - condition: template
+            value_template: "{{ provided_password == correct_password }}"
+        then:
+          - service: browser_mod.navigate # 认证成功，导航到分类页面
+            data:
+              path: /lovelace/categories # 这是分类页面的 Lovelace 路径
+          - service: browser_mod.popup_close # 关闭密码输入弹出窗口
+        else:
+          - service: browser_mod.popup # 认证失败，显示错误提示
+            data:
+              title: "认证失败"
+              card:
+                type: markdown
+                content: "用户名或密码不正确！"
+              timeout: 3000 # 3秒后自动关闭
+########################################################################################################################
 send_tcp_command_script:
   alias: "发送 TCP 命令通用脚本"
   description: "一个用于调用 shell_command.send_cmd 的通用脚本，接受 IP、端口、命令、回车符开关、十六进制开关和编码方式作为参数。"

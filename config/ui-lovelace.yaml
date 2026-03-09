@@ -1,14 +1,163 @@
+# ui-lovelace.yaml
+
 background: center / cover no-repeat url('/local/img/blue.jpg') fixed
+
+# Kiosk 模式设置
 kiosk_mode:
   hide_header: true
   hide_sidebar: true
+
+# 资源加载 (确保 kiosk-mode.js 类型正确)
 resources:
   - url: /local/file-loader.js
     type: module
   - url: /local/kiosk-mode.js?v=1.0.0
     type: module
+
+# --- 仪表盘视图定义 ---
 views:
-  - title: Home
+  # --- 1. 主页视图 (Home Page) ---
+  - title: 智能会议室主页
+    path: home # Lovelace 路径，用户访问 /lovelace/home
+    icon: mdi:home
+    badges:
+      # 你的现有徽章
+      - type: entity
+        entity: weather.tian_qi_home
+      - type: entity
+        show_name: true
+        show_state: false
+        show_icon: true
+        entity: sensor.backup_backup_manager_state
+        name: 主机
+        color: green
+        show_entity_picture: true
+        # 建议使用标准的 MDI 图标，或确保你的 custom_icon 插件已安装并配置
+        icon: file:jz # 已从 file:jz 更改为 MDI 图标
+
+    cards:
+      # 使用 picture-elements 卡片来精确放置按钮和文本
+      - type: picture-elements
+        image: /local/img/transparent_placeholder.png # 放置你创建的透明图片
+        elements:
+          # 进入下一页的按钮
+          - type: button
+            icon: mdi:lock-open-variant # 按钮图标
+            name: 进入智能会议室
+            style: # 按钮样式，使其居中并美观
+              top: 50%
+              left: 50%
+              transform: translate(-50%, -50%) # CSS 转换，确保元素中心对齐到 50%, 50%
+              width: 180px # 按钮宽度
+              height: 180px # 按钮高度
+              border-radius: 50% # 圆形按钮
+              background-color: rgba(0,0,0,0.5) # 半透明黑色背景
+              color: white # 文本和图标颜色
+              --mdc-icon-size: 60px # 增大图标尺寸
+              font-size: 22px # 增大字体尺寸
+              font-weight: bold
+            tap_action:
+              action: call-service
+              service: browser_mod.popup # 点击按钮时弹出密码输入框
+              data:
+                title: "请输入凭证"
+                card:
+                  type: vertical-stack # 弹出框内的卡片布局
+                  cards:
+                    - type: entities # 包含用户名和密码输入框
+                      entities:
+                        - entity: input_text.main_page_username
+                          name: 用户名
+                          icon: mdi:account
+                        - entity: input_text.main_page_password # 密码输入框 (默认不遮蔽字符)
+                          name: 密码
+                          icon: mdi:key
+                          # 如果需要密码遮蔽，你可能需要安装 HACS 的 custom:hui-text-box-card 或类似插件，并配置其 type: password
+                          # 例如: - type: custom:hui-text-box-card entity: input_text.main_page_password name: 密码 type: password
+                    - type: button # 弹出框内的“提交”按钮
+                      name: 确认进入
+                      icon: mdi:login
+                      tap_action:
+                        action: call-service
+                        service: script.authenticate_and_navigate # 调用我们上面定义的认证脚本
+                        data: # 将输入框的值作为参数传递给脚本
+                          username: "{{ states('input_text.main_page_username') }}"
+                          password: "{{ states('input_text.main_page_password') }}"
+                timeout: 0 # 弹出窗口不自动关闭
+                dismiss_action:
+                  action: call-service
+                  service: browser_mod.popup_close # 点击弹出框外部时关闭弹出框
+
+          # 主页上的欢迎文本 (位于图片下方)
+          - type: markdown
+            content: |
+              <span style="font-size: 28px;">欢迎来到智能会议室</span>
+            style:
+              top: 85% # 垂直位置
+              left: 50% # 水平位置
+              transform: translate(-50%, -50%)
+              color: white # 文本颜色
+              text-shadow: 2px 2px 4px rgba(0,0,0,0.7); # 文本阴影增加可读性
+              width: 90% # 文本宽度
+              text-align: center
+              font-weight: bold
+
+  # --- 2. 分类页面视图 (Categories Page) ---
+  - title: 区域功能选择
+    path: categories # Lovelace 路径，用户访问 /lovelace/categories
+    icon: mdi:view-grid
+    cards:
+      - type: markdown
+        content: |
+          # 请选择功能区域
+          ---
+        style:
+          text-align: center
+      - type: grid # 使用网格布局放置分类按钮
+        columns: 2 # 每行显示两个按钮
+        square: false
+        cards:
+          - type: button
+            name: 灯光控制
+            icon: mdi:lightbulb-group
+            tap_action:
+              action: navigate
+              navigation_path: /lovelace/lights # 导航到“灯光”子页面 (你需要创建这个页面)
+          - type: button
+            name: 音频系统
+            icon: mdi:speaker-multiple
+            tap_action:
+              action: navigate
+              navigation_path: /lovelace/audio # 导航到“音频”子页面
+          - type: button
+            name: 视频设备
+            icon: mdi:movie-open
+            tap_action:
+              action: navigate
+              navigation_path: /lovelace/video # 导航到“视频”子页面
+          - type: button
+            name: 窗帘控制
+            icon: mdi:blinds
+            tap_action:
+              action: navigate
+              navigation_path: /lovelace/curtains # 导航到“窗帘”子页面
+          - type: button
+            name: 电源管理
+            icon: mdi:power-socket-us
+            tap_action:
+              action: navigate
+              navigation_path: /lovelace/power # 导航到“电源”子页面
+          - type: button
+            name: 其他设置
+            icon: mdi:dots-horizontal
+            tap_action:
+              action: navigate
+              navigation_path: /lovelace/others # 导航到“其他”子页面
+
+  # --- 3. 智能会议室详细控制视图 (你原有的页面) ---
+  - title: 智能会议室控制
+    path: meeting_room # Lovelace 路径，用户访问 /lovelace/meeting_room
+    icon: mdi:microsoft-teams # 可以换一个图标
     header:
       card:
         type: markdown
@@ -28,7 +177,7 @@ views:
         name: 主机
         color: green
         show_entity_picture: true
-        icon: file:jz
+        icon: mdi:server # 已从 file:jz 更改为 MDI 图标
     sections:
       - type: grid
         cards:
@@ -95,10 +244,11 @@ views:
             show_icon: true
             type: button
             name: 客厅空调 - 开
-            icon: file:jz
+            icon: mdi:air-conditioner # 已从 file:jz 更改为 MDI 图标
             show_state: false
             tap_action:
-              action: perform-action
+              action: call-service # 将 perform-action 改为 call-service
+              service: script.send_tcp_command_script # 直接调用脚本
               data:
                 ip_address: 192.168.3.28
                 port_number: 1222
@@ -106,8 +256,6 @@ views:
                 append_carriage_return: false
                 send_as_hex: true
                 encoding: ascii
-              perform_action: script.send_tcp_command_script
-              target: {}
             hold_action:
               action: more-info
           - show_name: true
@@ -117,7 +265,8 @@ views:
             icon: mdi:air-conditioner
             show_state: false
             tap_action:
-              action: perform-action
+              action: call-service # 将 perform-action 改为 call-service
+              service: script.send_tcp_command_script # 直接调用脚本
               data:
                 ip_address: 192.168.3.116
                 port_number: 4001
@@ -125,8 +274,6 @@ views:
                 append_carriage_return: false
                 send_as_hex: false
                 encoding: utf-8
-              perform_action: script.send_tcp_command_script
-              target: {}
             hold_action:
               action: more-info
           - show_name: true
@@ -134,8 +281,8 @@ views:
             type: button
             icon: ''
             tap_action:
-              action: perform-action
-              perform_action: script.send_rs232_data_script
+              action: call-service # 将 perform-action 改为 call-service
+              service: script.send_rs232_data_script # 直接调用脚本
               data:
                 port: /dev/ttyS1
                 baudrate: 9600
@@ -147,7 +294,6 @@ views:
                 read_response: false
                 encoding: ascii
                 data: A5 C3 3C 5A FF 36 03 03 02 00 01 EE
-              target: {}
             grid_options:
               columns: 3
               rows: 1
