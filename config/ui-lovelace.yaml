@@ -38,7 +38,7 @@ views:
     cards:
       # 使用 picture-elements 卡片来精确放置按钮和文本
       - type: picture-elements
-        image: /local/img/transparent_placeholder.png # 放置你创建的透明图片
+        image: /local/img/green.jpg # 放置你创建的透明图片
         elements:
           # 进入下一页的按钮
           - type: button
@@ -66,10 +66,10 @@ views:
                   cards:
                     - type: entities # 包含用户名和密码输入框
                       entities:
-                        - entity: input_text.main_page_username
+                        - entity: input_text.admin
                           name: 用户名
                           icon: mdi:account
-                        - entity: input_text.main_page_password # 密码输入框 (默认不遮蔽字符)
+                        - entity: input_text.pawll # 密码输入框 (默认不遮蔽字符)
                           name: 密码
                           icon: mdi:key
                           # 如果需要密码遮蔽，你可能需要安装 HACS 的 custom:hui-text-box-card 或类似插件，并配置其 type: password
