@@ -5,20 +5,21 @@ authenticate_and_navigate:
     - variables:
         provided_username: "{{ username | default('') }}"
         provided_password: "{{ password | default('') }}"
-        correct_username: "admin"
-        correct_password: "admin"
+        correct_username: "admin"   # 请替换为你的用户名
+        correct_password: "admin"     # 请替换为你的密码
+
     - if:
-        condition:
+        condition: # 确保这个 'condition:' 恰好在 'if:' 下面，缩进2个空格
+          - condition: template # 确保这个 '- condition:' 恰好在 'condition:' 下面，缩进2个空格
+            value_template: "{{ provided_username == correct_username }}" # 确保这个 'value_template:' 恰好在 '- condition:' 下面，缩进2个空格
           - condition: template
-            value_template: "{{ provided_username == correct_username }}"
-          - condition: template
-            value_template: "{{ provided_password == correct_password }}" # <--- 修正后的关键行
-        then:
+            value_template: "{{ provided_password == correct_password }}"
+        then: # 确保这个 'then:' 恰好在 'if:' 下面，缩进2个空格
           - service: browser_mod.navigate
             data:
               path: /lovelace/categories
           - service: browser_mod.popup_close
-        else:
+        else: # 确保这个 'else:' 恰好在 'if:' 下面，缩进2个空格
           - service: browser_mod.popup
             data:
               title: "认证失败"
