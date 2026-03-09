@@ -6,7 +6,7 @@ views:
     icon: mdi:home
     cards:
       - type: entities
-        title: Main Sensors
+        title: 亲爱的
         entities:
           - sensor.temperature
           - light.living_room
