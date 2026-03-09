@@ -13,7 +13,7 @@ resources:
     type: module
   - url: /local/kiosk-mode.js?v=1.0.0
     type: module
-  - url: /browser_mod.js
+  - url: /browser_mod_panel.js
     type: module
 # --- 仪表盘视图定义 ---
 views:
