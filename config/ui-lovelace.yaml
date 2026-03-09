@@ -11,9 +11,9 @@ kiosk_mode:
 resources:
   - url: /local/file-loader.js
     type: module
-  - url: /local/kiosk-mode.js?v=1.0.0
+  - url: /local/kiosk-mode.js?v=9.0.2
     type: module
-  - url: /browser_mod_panel.js
+  - url: /browser_mod.js
     type: module
 # --- 仪表盘视图定义 ---
 views:
