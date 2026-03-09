@@ -27,6 +27,8 @@ shell_command:
   
 python_script:
 
+browser_mod:
+
 lovelace:
   mode: yaml
   dashboards:
@@ -41,10 +43,6 @@ lovelace:
 http:
   server_port: 1404
   use_x_forwarded_for: true
-  trusted_proxies:
-    - 127.0.0.1       # Nginx 和 HA 在同一台机器上时
-    - 192.168.2.2   # 假设 Nginx 服务器的 IP 是这个（如果是另一台机器）
-
 
 
 # 从主题文件夹加载前端主题
