@@ -1,4 +1,3 @@
-
 # 加载默认集成集。请勿移除.
 default_config:
 homeassistant: # <-- 请确保这一行从文件的最左边开始，前面没有任何空格
